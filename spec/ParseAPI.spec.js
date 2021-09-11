@@ -1731,7 +1731,7 @@ describe('miscellaneous', function () {
       );
   });
 });
-
+//Write test for Rest schema fix for hiding reserved fields.
 describe_only_db('mongo')('legacy _acl', () => {
   it('should have _acl when locking down (regression for #2465)', done => {
     const headers = {
