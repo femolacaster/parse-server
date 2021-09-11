@@ -1733,7 +1733,7 @@ describe('miscellaneous', function () {
 });
 //Write test for Rest schema fix for hiding reserved fields.
 fdescribe('FilterOptions', () => {
-  fit('ignoreDefaultFields not registered in filter options list', done => {
+  it('ignoreDefaultFields not registered in filter options list', done => {
     const headers = {
       'X-Parse-Application-Id': 'test',
       'X-Parse-Master-Key': 'rest',
@@ -1762,7 +1762,7 @@ fdescribe('FilterOptions', () => {
       .then(() => done());
   });
 
-  fit('Should ignore default fields with body filter options', done => {
+  it('Should ignore default fields with body filter options', done => {
     const headers = {
       'X-Parse-Application-Id': 'test',
       'X-Parse-Master-Key': 'test',
