@@ -1732,6 +1732,109 @@ describe('miscellaneous', function () {
   });
 });
 //Write test for Rest schema fix for hiding reserved fields.
+fdescribe('FilterOptions', () => {
+  fit('ignoreDefaultFields not registered in filter options list', done => {
+    const headers = {
+      'X-Parse-Application-Id': 'test',
+      'X-Parse-Master-Key': 'rest',
+      'Content-Type': 'application/json',
+    };
+    request({
+      method: 'POST',
+      headers: headers,
+      url: 'http://localhost:8378/1/schemas/className',
+      json: true,
+      body: {
+        className: 'className',
+        fields: {
+          objectId: {
+            type: 'String',
+          },
+          name: {
+            type: 'String',
+          },
+        },
+      },
+    })
+      .catch(e => {
+        expect(e.status).toEqual(400);
+      })
+      .then(() => done());
+  });
+
+  fit('Should ignore default fields with body filter options', done => {
+    const headers = {
+      'X-Parse-Application-Id': 'test',
+      'X-Parse-Master-Key': 'test',
+      'Content-Type': 'application/json',
+    };
+    request({
+      method: 'POST',
+      headers,
+      url: 'http://localhost:8378/1/schemas/className',
+      json: true,
+      body: {
+        options: {
+          ignoreDefaultFields: true,
+        },
+        className: 'className',
+        fields: {
+          objectId: {
+            type: 'Number',
+          },
+          name: {
+            type: 'String',
+          },
+        },
+      },
+    })
+      .then(response => {
+        expect(response).toBeDefined();
+        expect(response.data.fields.objectId.type).not.toBe('Number');
+        expect(response.data.fields.objectId.type).toBe('String');
+        expect(response.data.fields.name.type).toBe('String');
+      })
+      .catch(e => expect(e).not.toBeDefined())
+      .then(() => done());
+  });
+
+  fit('Should ignore default fields with query filter options', done => {
+    const headers = {
+      'X-Parse-Application-Id': 'test',
+      'X-Parse-Master-Key': 'test',
+      'Content-Type': 'application/json',
+    };
+    request({
+      method: 'POST',
+      headers,
+      url: 'http://localhost:8378/1/schemas/className',
+      params: {
+        ignoreDefaultFields: true,
+      },
+      json: true,
+      body: {
+        className: 'className',
+        fields: {
+          objectId: {
+            type: 'Number',
+          },
+          name: {
+            type: 'String',
+          },
+        },
+      },
+    })
+      .then(response => {
+        expect(response).toBeDefined();
+        expect(response.data.fields.objectId.type).not.toBe('Number');
+        expect(response.data.fields.objectId.type).toBe('String');
+        expect(response.data.fields.name.type).toBe('String');
+      })
+      .catch(e => expect(e).not.toBeDefined())
+      .then(() => done());
+  });
+});
+
 describe_only_db('mongo')('legacy _acl', () => {
   it('should have _acl when locking down (regression for #2465)', done => {
     const headers = {
